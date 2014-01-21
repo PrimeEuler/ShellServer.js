@@ -31,8 +31,12 @@ http://localhost:8080
 Use:
 ```bash
 Click terminal icon ( >_ ). 
-Type telnet nethack.alt.org in the terminal window.
+
+Type "telnet nethack.alt.org" in the terminal window.
+
 Click terminal icon ( >_ ). 
-Type ssh nethack.alt.org in the terminal window. ( Username : nethack, Passowrd: password )
+
+Type "ssh nethack.alt.org" in the terminal window. 
+( Username : nethack, Passowrd: password )
 
 ```
