@@ -12,6 +12,7 @@ Requirements:
 * [bone.io](https://github.com/techpines/bone.io)
 * [term.js](https://github.com/chjj/term.js)
 
+
 Install:
 ```bash
 npm install express.io
@@ -20,14 +21,19 @@ npm install bone.io
 term.js is already included in the /js directory
 ```
 
+
 Run:
 ```bash
 node Shell_Server.js
 ```
+
+
 Connect:
 ```bash
 http://localhost:8080
 ```
+
+
 Use:
 ```bash
 Click terminal icon ( >_ ). 
