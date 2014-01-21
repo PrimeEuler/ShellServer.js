@@ -8,7 +8,7 @@ app.use(bone.static());
 app.use(express.cookieParser());
 app.use(express.session({ secret: 'shell_9973' }));
 app.use(express.static(__dirname));
-app.listen(6970);
+app.listen(8080);
 
 var SHELL_SERVER = bone.io('shell', {
     outbound: {
