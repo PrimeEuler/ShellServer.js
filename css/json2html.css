@@ -1,0 +1,49 @@
+        .package {
+		            padding:5px;
+		            border-radius:5px;
+		            border:thin solid #595540;
+		            margin-left:15px;}
+		            
+		.header {   cursor:pointer;}
+
+		.name {     color:#cc8139;}
+
+
+        .selected { color:red;}
+        .value { }
+		.array {    background-color:transparent;
+		            border:thin solid #595540;}
+		.object {   background-color:transparent;
+		            border:thin solid #595540;}
+		            
+		.string {   color:papayawhip;}
+		.number {   color:papayawhip;}
+		.function { color:papayawhip;}
+
+		.open .children {display:block;}
+		.closed .children {display:none;}
+		
+		.arrow {    cursor:pointer;
+		            background-repeat:no-repeat; 
+		            background-color:transparent; 
+		            height:15px; width:15px; 
+                    
+		            overflow: hidden;
+		            display:inline-block;}
+
+		.open .arrow 
+		{
+		    
+		            background-image:url("r.svg");
+		            background-position:1px 1px;}
+		.closed .arrow 
+		{
+		    
+		            background-image:url("d.svg");
+		            background-position:1px 1px;}
+
+		.type {     color:gray;
+		            font-size:8pt;
+		            float:right;}
+		.hide {     display:none;}
+		

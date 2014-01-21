@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+
+    <title>SHELL SERVER</title>
+
+    <!--online jquery
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+    <script type='text/javascript' src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type='text/javascript' src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    -->
+
+    <!--local jquery -->
+    <link rel="stylesheet" href="css/jquery-ui.css">
+    <script type='text/javascript' src="js/jquery-1.10.2.min.js"></script>
+    <script type='text/javascript' src="js/jquery-ui.js"></script>
+
+    <!--local terminal and jquery mouswheel plugin -->
+    <script type='text/javascript' src="js/jquery.mousewheel.js"></script>
+    <script type='text/javascript' src="js/term.js"></script>
+
+    <!--socket.io and bone.io for realtime shell server-->
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/bone.io/bone.io.js"></script>
+
+    <style>
+        html 
+        {         
+                    background-color: #262626;}
+        body 
+	    {                            
+	                background-color: transparent;
+                    color:#595540;
+		            font-family: monospace;
+		            font-size: 8pt;
+		            padding: 0px 0 0px;
+		            
+                    scrollbar-base-color: #595540;
+                    scrollbar-3dlight-color: #595540;
+                    scrollbar-highlight-color: #595540;
+                    scrollbar-track-color: #262626;
+                    scrollbar-arrow-color: #cc8139;
+                    scrollbar-shadow-color: #595540;
+                    scrollbar-dark-shadow-color: #595540;}	
+        .new-div-window  
+	    {           cursor:pointer;
+                    border-radius:5px;
+                    width: 50px;
+                    height:50px;
+                    float:left;
+                    overflow:hidden;
+                    background-position:7px 5px;
+                    background-size: 100% 100%;
+                    margin-top:5px;
+                    background-repeat:no-repeat;
+                    padding-left: 0px; } 
+        .div-selected 
+        {            
+                    background-color:rgba(60, 60, 60, 0.40);
+                    box-shadow: 20px 20px 50px rgba(0, 0, 0, 0.5);
+                    color:#cc8139;
+                    z-index:1000;}
+        .div-handle {
+                    display: block;
+                    height: 25px;
+                    border-bottom:medium double #595540;} 
+        .div-window
+        {           
+                    display: block;
+                    position:absolute;
+                    border: thin outset #262626;
+                    border-radius: 5px;} 
+        .div-window-title
+        {           margin-top:5px;
+                    margin-left:5px;
+                    display: block;
+                    position:absolute;
+                    } 
+        .div-window-close 
+	    {           cursor:pointer;
+                    border-radius:5px;
+                    width: 25px;
+                    height:25px;
+                    float:right;
+                    background-image: url("css/images/cross-cc8139.svg");
+                    background-position:7px 5px;
+                    background-repeat: no-repeat;
+                   
+       }  
+      .reverse-video {
+                    color: #262626;
+                    background: #cc8139;
+                    }
+
+       .terminal {
+
+              }
+        #term-style {
+
+              }
+       .terminal-cursor {
+
+            }
+    </style>
+</head>
+<body >
+<div id="new-term-window"   class="new-div-window" style='background-image: url("css/images/terminal-cc8139.svg");' ></div>
+</body>
+<script type='text/javascript'>
+    socket = io.connect();
+    bone.set('io.options', { socket: socket });
+    var SHELL_CLIENT = {};
+    var ShellIndex = 0;
+    var SHELL_SERVER = bone.io('shell', {
+        outbound: {
+            routes: ['create', 'destroy', 'data']
+        },
+        inbound: {
+            data: function (data, context) {
+                SHELL_CLIENT[data.shellname].write(data.data);
+            }
+        }
+    });
+
+
+</script>
+<script>
+
+    $('#new-term-window').click(function () { DIV_WINDOW('TERM_WINDOW'); });
+
+    var DivIndex = 0
+    var APP = this;
+
+
+    function DIV_WINDOW(DivType, args) {
+       //Main Window
+        $('<div/>', {
+            id: 'div-window-' + DivIndex,
+            "class": "div-window",
+            width: '400px',
+            height: '300px',
+            mousedown: function () {
+                $('.div-window').toggleClass("div-selected", false);
+                $(this).toggleClass("div-selected", true);
+            }
+        })
+        .css({ top: (DivIndex * 10) + 100, left: (DivIndex * 10) + 100 })
+        .appendTo("body")
+        .draggable({ handle: ".div-handle" })
+        .resizable({ minHeight: 300, minWidth: 400 });
+
+        //Window Handle
+        $('<div/>', {
+            id: 'div-handle-' + DivIndex,
+            'class': 'div-handle'
+        })
+        .appendTo('#div-window-' + DivIndex);
+
+        //Window Title
+        $('<span/>', {
+            id: 'div-window-title-' + DivIndex,
+            'class': 'div-window-title'
+        })
+        .appendTo('#div-handle-' + DivIndex);
+
+        //Window Close
+        $('<div/>', {
+            id: 'div-window-close-' + DivIndex,
+            'class': 'div-window-close',
+            click: function () {
+                $('#' + this.id.replace('close-', '')).remove();
+            }
+        })
+        .appendTo('#div-handle-' + DivIndex);
+
+
+        $('.div-window').toggleClass("div-selected", false);
+        $('#div-window-' + DivIndex).toggleClass("div-selected", true);
+
+        APP[DivType](args);
+        DivIndex++;
+        }
+
+
+
+
+    function TERM_WINDOW(args) {
+
+        //Adjust size and make resizable
+        $('#div-window-' + DivIndex)
+                        .height( 390 )
+                        .width( 700 )
+                        .resizable({ minHeight: 390, minWidth: 700 });
+        //Create Window body
+        $('<div/>', {
+            id: 'div-window-body-' + DivIndex,
+            'class': 'div-window-body'
+        })
+        .appendTo('#div-window-' + DivIndex);
+
+        //Create Shell
+        var shell_name = 'shell_' + ShellIndex;
+        ShellIndex++;
+
+        //Set Window Title to the Shell's name
+        $('#div-window-title-' + DivIndex).html(shell_name);
+
+        //Clear terminal colors to use CSS
+        Terminal.colors[256] = ''; 
+        Terminal.colors[257] = '';
+
+        //Create a Shell Client Terminal to connect to the Shell Server
+        SHELL_CLIENT[shell_name] = new Terminal({
+                                                    cols: 100,
+                                                    rows: 25,
+                                                    screenKeys: true
+                                                });
+
+        //Attach Shell Client Terminal to Window body
+        var element = document.getElementById('div-window-body-' + DivIndex); 
+        SHELL_CLIENT[shell_name].open(element, shell_name);
+
+        //Send the  Shell Client Terminal data to the Shell Server
+        SHELL_CLIENT[shell_name].on('data', function (data) {
+            SHELL_SERVER.data({
+                shellname: shell_name,
+                data: data
+            });
+        });
+        //Create Shell Client Terminal session on the Shell Server
+        SHELL_SERVER.create({ shellname: shell_name, data: '' });
+}
+</script>
+</html>
