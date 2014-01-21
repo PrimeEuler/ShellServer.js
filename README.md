@@ -5,7 +5,7 @@ Open multiple (dragable, resizable) terminal emulation sessions that send all ke
 
 
 Requirements:
-
+* [jquery](http://jquery.com/)
 * [node.js](http://nodejs.org/) -- v0.8.7 or newer
 * [ssh2](https://github.com/mscdex/ssh2)
 * [express.io](https://github.com/techpines/express.io)
