@@ -56,6 +56,36 @@ function SHELL_CREATE(self, data){
                 self[data.shellname].prompt = '\r\n\> ';
      };
      self[data.shellname].FUNCTIONS = {};
+
+
+     self[data.shellname].FUNCTIONS['ping'] = function (endpoint) {
+     	self[data.shellname].READY = false;
+
+     	self[data.shellname].shell = null;
+     	self[data.shellname].shell = new shell();
+     	self[data.shellname].shell.PING(endpoint.split(':')[0], function (response) {
+     		self.data({ shellname: data.shellname, data: '\r\n ' + response.data });
+     		self.data({ shellname: data.shellname, data: self[data.shellname].prompt });
+     		self[data.shellname].READY = true;
+     	});
+     }
+     self[data.shellname].FUNCTIONS['tracert'] = function (endpoint) {
+     	self[data.shellname].READY = false;
+
+     	self[data.shellname].shell = null;
+     	self[data.shellname].shell = new shell();
+     	self[data.shellname].shell.TRACERT(
+		endpoint.split(':')[0],
+		function (response) {//feed
+     		self.data({ shellname: data.shellname, data: '\r\n ' + response.data });
+     	},
+		function (response) {//done
+					self.data({ shellname: data.shellname, data: '\r\n ' + response.data });
+					self.data({ shellname: data.shellname, data: self[data.shellname].prompt });
+					self[data.shellname].READY = true;
+		}
+		);
+     }
      self[data.shellname].FUNCTIONS['telnet'] = function (endpoint) {
         self[data.shellname].shellAgrs.host = endpoint.split(':')[0];
          if(endpoint.split(':')[1]){
