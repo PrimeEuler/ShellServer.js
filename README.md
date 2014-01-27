@@ -50,6 +50,6 @@ Type "tracert 74.125.225.65" in the terminal window.
 
 ```
 
-Cloud9: *net-ping cannot be used on cloud9 due to admin/root requirements  
+Cloud9: *ssh is the only working protocol in the demo on cloud9  
 * [workspace](https://c9.io/pr1m3n0d3/shellserver_js)
 * [demo](https://shellserver_js-c9-pr1m3n0d3.c9.io)
