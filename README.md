@@ -3,6 +3,10 @@ ShellServer.js
 
 Open multiple (dragable, resizable) terminal emulation sessions that send all keystrokes from the web browser to the shell server. The shell server has four default functions ssh, telnet, ping and tracert. 
 
+For the time being the [shellServer]( https://github.com/PrimeEuler/nms.js/tree/master/lib/shellServer ) 
+has been combined with [nms.js]( https://github.com/PrimeEuler/nms.js ). See the [webNMS](https://github.com/PrimeEuler/nms.js/blob/master/example/webNMS.js) for an example.
+
+
 Component of:
 * [NMS.js](https://github.com/PrimeEuler/NMS.js)
 
